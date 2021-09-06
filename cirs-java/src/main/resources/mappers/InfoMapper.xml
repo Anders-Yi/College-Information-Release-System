@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cirs.dao.InfoMapper">
+    <!-- 查询所有校园信息 -->
+    <select id="getAllInfo" parameterType="com.cirs.entity.Info" resultType="com.cirs.entity.Info">
+        select
+        info_id as infoId,info_title as infoTitle,info_content as infoContent,release_time as releaseTime,uid,username,info_status as infoStatus
+        from info
+    </select>
+    <!-- 通过条件模糊查询校园信息 -->
+    <select id="queryInfoByConditions" parameterType="com.cirs.entity.Info" resultType="com.cirs.entity.Info">
+        select
+        info_id as infoId,info_title as infoTitle,info_content as infoContent,release_time as releaseTime,uid,username,info_status as infoStatus
+        from info
+        <where>
+            <if test="infoId != null">
+                info_id=#{infoId}
+            </if>
+            <if test="title != null and title != ''">
+                and info_title=#{title}
+            </if>
+            <if test="username != null and username != ''">
+                and username=#{username}
+            </if>
+            <if test="infoStatus != null">
+                and info_status=#{infoStatus}
+            </if>
+        </where>
+    </select>
+    <!-- 发布校园信息 -->
+    <insert id="insertInfo">
+        insert
+        into info(info_title,info_content,release_time,uid,username,info_status)
+        values (#{infoTitle},#{infoContent},#{releaseTime},#{uId},#{username},#{infoStatus})
+    </insert>
+    <!-- 修改校园信息 -->
+    <update id="updateInfoByNidAndUid" parameterType="com.cirs.entity.Info">
+        update info
+        set info_title=#{infoTitle},info_content=#{infoContent},release_time=#{releaseTime},uid=#{uId}
+        where info_id=#{infoId}
+    </update>
+    <!-- 修改审核信息状态 -->
+    <update id="updateInfoStatusByInfoId">
+        update info
+        set info_status=#{infoStatus}
+        where info_id=#{infoId}
+    </update>
+    <!-- 删除校园信息 -->
+    <delete id="deleInfo" parameterType="int">
+        delete from info where info_id=#{infoId}
+    </delete>
+</mapper>

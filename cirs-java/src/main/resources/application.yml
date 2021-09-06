@@ -1,0 +1,21 @@
+server:
+  port: 8085
+
+spring:
+  auto:
+    openurl: true
+  web:
+    apiurl: http://localhost:8085/swagger-ui.html
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cirs?userUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 
+
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+
+
+logging:
+  level:
+    com.cirs.dao: debug

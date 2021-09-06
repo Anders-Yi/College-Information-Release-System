@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cirs.dao.UserMapper">
+    <!-- 用户注册 -->
+    <insert id="addUser" parameterType="com.cirs.entity.User">
+        insert into
+        account(uid,username,password,sex,birthday,depart_id,clazz_id,role,position,u_status)
+        values(#{uId},#{username},#{password},#{sex},#{birthday},#{departId},#{clazzId},#{role},#{position},#{uStatus})
+    </insert>
+
+
+    <!-- 登录 -->
+    <select id="queryUserByUidAndPassword" parameterType="com.cirs.entity.User" resultType="com.cirs.entity.User">
+        select
+        uid,username,password,sex,birthday,depart_id as departId,clazz_id as clazzId,role,position,u_status as uStatus
+        from account
+        where uid=#{uId} and password=#{password}
+    </select>
+    <!-- 查询所有人 -->
+    <select id="queryAllUser" parameterType="com.cirs.entity.User" resultType="com.cirs.entity.User">
+        select
+        uid,username,password,sex,birthday,depart_id as departId,clazz_id as clazzId,role,position,u_status as uStatus
+        from account
+    </select>
+    <!-- 查询所有学生用户 -->
+    <select id="queryStuUser" resultType="com.cirs.entity.User">
+        select
+        uid,username,password,sex,birthday,depart_id as departId,clazz_id as clazzId,role,position,u_status as uStatus
+        from account
+        where role=2
+    </select>
+    <!-- 通过用户编号、用户名、用户状态和角色任意组合条件查询用户 -->
+    <select id="queryUsers" resultType="com.cirs.entity.User">
+        select
+        uid,username,password,sex,birthday,depart_id as departId,clazz_id as clazzId,role,position,u_status as uStatus
+        from account
+        <where>
+            <if test="uId != 0">
+                uid=#{uId}
+            </if>
+            <if test="username != ''">
+                and username=#{username}
+            </if>
+            <if test="uStatus != 3">
+                and u_status=#{uStatus}
+            </if>
+            <if test="role != 3">
+                and role=#{role}
+            </if>
+        </where>
+    </select>
+    <!-- 通过用户编号查询用户 -->
+    <select id="queryUserByUid" resultType="com.cirs.entity.User">
+        select
+        uid,username,password,sex,birthday,depart_id as departId,clazz_id as clazzId,role,position,u_status as uStatus
+        from account
+        where uid=#{uid}
+    </select>
+
+
+    <!-- 通过用户id修改用户基础信息 -->
+    <update id="updateUserBaseInfoByUid" parameterType="com.cirs.entity.User">
+        update account
+        set username=#{username},sex=#{sex},birthday=#{birthday},depart_id=#{departId},clazz_id=#{clazzId}
+        where uid=#{uId}
+    </update>
+    <!-- 通过用户id修改用户信息 -->
+    <update id="updateUserInfoByUid" parameterType="com.cirs.entity.User">
+        update account
+        set username=#{username},password=#{password},sex=#{sex},birthday=#{birthday},depart_id=#{departId},clazz_id=#{clazzId},role=#{role},position=#{position},u_status=#{uStatus}
+        where uid=#{uId}
+    </update>
+    <!-- 通过用户id修改用户密码 -->
+    <update id="updateUserPasswordByUid" parameterType="com.cirs.entity.User">
+        update account set password=#{password} where uid=#{uId}
+    </update>
+    <!-- 重置密码 -->
+    <update id="initUserPasswordByUid" parameterType="int">
+        update account set password='e10adc3949ba59abbe56e057f20f883e' where uid=#{uId}
+    </update>
+    <!-- 通过用户id修改用户权限 -->
+    <update id="updateUserPositionByUid">
+        update account set position=#{position} where uid=#{uId}
+    </update>
+    <!-- 修改用户状态 -->
+    <update id="updateUserStatusByUid">
+        update account set u_status=#{uStatus} where uid=#{uId}
+    </update>
+
+
+    <!-- 通过用户id删除该用户 -->
+    <delete id="deleUserByUid" parameterType="int">
+        delete from account where uid=#{uid}
+    </delete>
+</mapper>
